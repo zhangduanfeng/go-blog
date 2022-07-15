@@ -1,0 +1,7 @@
+#  mysql配置
+mysql:
+  host: sh-cynosdbmysql-grp-1vg8w4ba.sql.tencentcdb.com
+  port: 20182
+  name: blog_db
+  user: root
+  password: zdf112233.
