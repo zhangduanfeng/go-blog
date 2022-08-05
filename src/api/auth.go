@@ -86,7 +86,6 @@ func Login(c *gin.Context) {
 		"status": 1,
 		"data":   m,
 	})
-	c.String(http.StatusOK, signedToken)
 }
 
 //func Verify(c *gin.Context) {
