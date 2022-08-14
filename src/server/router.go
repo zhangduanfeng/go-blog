@@ -17,6 +17,7 @@ import (
 func NewRouter() *gin.Engine {
 	r := gin.Default()
 	r.POST("/login", api.Login)
+	r.GET("/homePage", api.GetArticles)
 	//r.GET("/verify/:token", api.Verify)
 	//r.GET("/refresh/:token", api.Refresh)
 	//r.GET("/sayHello/:token", api.SayHello)

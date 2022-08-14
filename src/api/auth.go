@@ -41,12 +41,18 @@ type JWTClaims struct { // token里面添加用户信息，验证token后可能�
 	RoleId   int64  `json:"role_id"`
 }
 
+/**
+ * @Description 后台系统登录
+ * @Param
+ * @return
+ **/
 func Login(c *gin.Context) {
 	var user model.User
 	err := c.ShouldBindJSON(&user)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"error": err.Error(),
+			"code":    0,
+			"message": "参数解析异常",
 		})
 	}
 	result := store.DB.Where("username = ? AND password = ? AND delete_flag = 0", user.Username, user.Password).First(&user)
@@ -54,12 +60,12 @@ func Login(c *gin.Context) {
 		//用户不存在
 		if result.Error.Error() == "record not found" {
 			c.JSON(http.StatusOK, gin.H{
-				"status":  errmsg.ERROR_USERNAME_NOT_EXIST,
+				"code":    errmsg.ERROR_USERNAME_NOT_EXIST,
 				"message": errmsg.GetErrmsg(errmsg.ERROR_USERNAME_NOT_EXIST),
 			})
 		} else {
 			c.JSON(http.StatusInternalServerError, gin.H{
-				"status":  0,
+				"code":    0,
 				"message": errmsg.GetErrmsg(errmsg.ERROR),
 			})
 		}
@@ -83,8 +89,8 @@ func Login(c *gin.Context) {
 	m["token"] = signedToken
 	m["user_Info"] = user
 	c.JSON(http.StatusOK, gin.H{
-		"status": 1,
-		"data":   m,
+		"code": 1,
+		"data": m,
 	})
 }
 
