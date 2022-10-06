@@ -56,7 +56,7 @@ func Login(c *gin.Context) {
 			"message": "参数解析异常",
 		})
 	}
-	result := store.DB.Where("username = ? AND password = ? AND delete_flag = 0", user.Username, user.Password).First(&user)
+	result := store.DB.Where("username = ? AND password = ? AND valid = 0", user.Username, user.Password).First(&user)
 	if result.Error != nil {
 		//用户不存在
 		if result.Error.Error() == "record not found" {
