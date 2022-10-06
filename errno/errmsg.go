@@ -60,10 +60,10 @@ func ConstructResp(code, msg string, data interface{}) gin.H {
 	var result = gin.H{}
 	if code != "" {
 		result["code"] = code
+	} else {
+		result["code"] = 0
 	}
-	if msg != "" {
-		result["msg"] = msg
-	}
+	result["msg"] = msg
 	if data != nil {
 		result["data"] = data
 	}
