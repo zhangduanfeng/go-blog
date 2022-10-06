@@ -57,10 +57,10 @@ func ListArticles(c *gin.Context) {
 func convArticleDO2DTO(article *model.Article) *dto.Article {
 	var result = &dto.Article{
 		Id:         article.Id,
-		CreateTime: article.CreateTime.String(),
+		CreateTime: article.CreateTime,
 		CreateId:   article.CreateId,
 		UpdateId:   article.UpdateId,
-		UpdateTime: article.UpdateTime.String(),
+		UpdateTime: article.UpdateTime,
 		Title:      article.Title,
 		Content:    article.Content,
 	}

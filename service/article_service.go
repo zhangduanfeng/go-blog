@@ -32,8 +32,8 @@ func CreateArticle(title, content string, createId int64) (int64, error) {
 		UpdateId:   createId,
 		Title:      title,
 		Content:    content,
-		CreateTime: time.Now(),
-		UpdateTime: time.Now(),
+		CreateTime: time.Now().String(),
+		UpdateTime: time.Now().String(),
 	}
 	return db.CreateArticles(article)
 }
