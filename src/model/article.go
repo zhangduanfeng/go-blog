@@ -12,6 +12,7 @@ type Article struct {
 	UpdateId    int64  `json:"updateId"`
 	UpdateTime  string `json:"updateTime"`
 	Title       string `json:"title" validate:"required" label:"文章标题"`
+	Abstract    string `json:"abstract" label:"文章摘要"`
 	Content     string `json:"content" validate:"required" label:"文章内容"`
 	TagId       int64  `json:"tag_id" validate:"required" label:"标签id"`
 	LikeCount   int64  `json:"like_count" validate:"required" label:"点赞数"`

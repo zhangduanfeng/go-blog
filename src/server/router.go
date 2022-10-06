@@ -3,6 +3,7 @@ package server
 import (
 	"github.com/gin-gonic/gin"
 	"go-blog/src/api"
+	"go-blog/src/api/bg"
 )
 
 // NewRouter 路由配置
@@ -16,8 +17,9 @@ import (
 // 		   我们在项目中leader 比较推荐第二种，这样团队搜索路由很方面，能很快定位。因为这边我也全部改成第二种了
 func NewRouter() *gin.Engine {
 	r := gin.Default()
-	r.POST("/login", api.Login)
+	r.POST("/login", bg.Login)
 	r.GET("/homePage", api.GetArticles)
+	r.POST("/addArticle", bg.AddArticle)
 	//r.GET("/verify/:token", api.Verify)
 	//r.GET("/refresh/:token", api.Refresh)
 	//r.GET("/sayHello/:token", api.SayHello)

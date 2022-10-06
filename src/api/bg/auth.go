@@ -1,4 +1,4 @@
-package api
+package bg
 
 import (
 	_ "database/sql"
