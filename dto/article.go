@@ -16,3 +16,13 @@ type Article struct {
 	Title      string `json:"title"`
 	Content    string `json:"content"`
 }
+
+type CreateArticleRequest struct {
+	Title    string
+	Content  string
+	CreateId int64
+}
+
+type CreateArticleResponse struct {
+	ArticleId int64
+}

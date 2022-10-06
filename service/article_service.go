@@ -3,6 +3,7 @@ package service
 import (
 	"go-blog/dal/db"
 	"go-blog/model"
+	"time"
 )
 
 func ListArticles(pageNo, pageSize int64) ([]*model.Article, int64, error) {
@@ -23,4 +24,16 @@ func ListArticles(pageNo, pageSize int64) ([]*model.Article, int64, error) {
 		return nil, 0, err
 	}
 	return articles, count, nil
+}
+
+func CreateArticle(title, content string, createId int64) (int64, error) {
+	var article = &model.Article{
+		CreateId:   createId,
+		UpdateId:   createId,
+		Title:      title,
+		Content:    content,
+		CreateTime: time.Now(),
+		UpdateTime: time.Now(),
+	}
+	return db.CreateArticles(article)
 }

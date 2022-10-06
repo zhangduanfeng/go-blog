@@ -12,7 +12,20 @@ import (
 )
 
 func CreateArticle(c *gin.Context) {
-
+	var req = &dto.CreateArticleRequest{}
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusOK, errno.ConstructErrResp(string(rune(errno.ERROR)), err.Error()))
+		return
+	}
+	id, err := service.CreateArticle(req.Title, req.Content, req.CreateId)
+	if err != nil {
+		c.JSON(http.StatusOK, errno.ConstructErrResp(string(rune(errno.ERROR)), err.Error()))
+		return
+	}
+	c.JSON(http.StatusOK, errno.ConstructResp("", "", &dto.CreateArticleResponse{
+		ArticleId: id,
+	}))
+	return
 }
 
 func ListArticles(c *gin.Context) {
@@ -44,10 +57,10 @@ func ListArticles(c *gin.Context) {
 func convArticleDO2DTO(article *model.Article) *dto.Article {
 	var result = &dto.Article{
 		Id:         article.Id,
-		CreateTime: article.CreateTime,
+		CreateTime: article.CreateTime.String(),
 		CreateId:   article.CreateId,
 		UpdateId:   article.UpdateId,
-		UpdateTime: article.UpdateTime,
+		UpdateTime: article.UpdateTime.String(),
 		Title:      article.Title,
 		Content:    article.Content,
 	}
