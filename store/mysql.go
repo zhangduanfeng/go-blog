@@ -12,7 +12,7 @@ func init() {
 	var err error
 	DB, err = gorm.Open(
 		"mysql",
-		"root:zdf112233.@(sh-cynosdbmysql-grp-1vg8w4ba.sql.tencentcdb.com:20182)/blog_db")
+		"root:zdf112233.@(sh-cynosdbmysql-grp-1vg8w4ba.sql.tencentcdb.com:20182)/blog_db?parseTime=true")
 	if err != nil {
 		panic(err)
 	}
