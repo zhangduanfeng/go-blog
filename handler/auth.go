@@ -1,16 +1,17 @@
-package api
+package handler
 
 import (
 	_ "database/sql"
 	"errors"
-	"github.com/dgrijalva/jwt-go"
-	"github.com/gin-gonic/gin"
-	"go-blog/src/model"
-	"go-blog/src/store"
-	"go-blog/src/utils/errmsg"
+	"go-blog/model"
+	"go-blog/store"
+	"go-blog/utils/errmsg"
 	"net/http"
 	"strings"
 	"time"
+
+	"github.com/dgrijalva/jwt-go"
+	"github.com/gin-gonic/gin"
 )
 
 const (

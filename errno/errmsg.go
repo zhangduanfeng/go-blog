@@ -1,4 +1,8 @@
-package errmsg
+package errno
+
+import (
+	"github.com/gin-gonic/gin"
+)
 
 const (
 	SUCCSE = 200
@@ -43,4 +47,25 @@ var codemsg = map[int]string{
 // 获取错误信息函数
 func GetErrmsg(code int) string {
 	return codemsg[code]
+}
+
+func ConstructErrResp(code, msg string) gin.H {
+	return gin.H{
+		"code": code,
+		"msg":  msg,
+	}
+}
+
+func ConstructResp(code, msg string, data interface{}) gin.H {
+	var result = gin.H{}
+	if code != "" {
+		result["code"] = code
+	}
+	if msg != "" {
+		result["msg"] = msg
+	}
+	if data != nil {
+		result["data"] = data
+	}
+	return result
 }
