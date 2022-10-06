@@ -18,7 +18,7 @@ import (
 func NewRouter() *gin.Engine {
 	r := gin.Default()
 	r.POST("/login", handler.Login)
-	r.GET("/article/get", handler.ListArticles)
+	r.GET("/article/list", handler.ListArticles)
 	r.POST("/article/create", handler.CreateArticle)
 	return r
 }

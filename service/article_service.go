@@ -5,22 +5,22 @@ import (
 	"go-blog/model"
 )
 
-func ListArticles(pageNo, pageSize int64) ([]*model.Article, error) {
+func ListArticles(pageNo, pageSize int64) ([]*model.Article, int64, error) {
 	var articles = make([]*model.Article, 0)
 
 	//分页
 	count, err := db.CountArticles()
 	if err != nil {
-		return nil, err
+		return nil, 0, err
 	}
 
 	if count == 0 {
-		return articles, nil
+		return articles, 0, nil
 	}
 
 	articles, err = db.PageQueryArticles((pageNo-1)*pageSize, pageSize)
 	if err != nil {
-		return nil, err
+		return nil, 0, err
 	}
-	return articles, nil
+	return articles, count, nil
 }

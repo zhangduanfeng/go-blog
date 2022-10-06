@@ -21,9 +21,8 @@ func ListArticles(c *gin.Context) {
 	pageSize, _ := strconv.Atoi(c.DefaultQuery("pageSize", "10"))
 
 	// query from db
-	articles, err := service.ListArticles(int64(pageNum), int64(pageSize))
+	articles, total, err := service.ListArticles(int64(pageNum), int64(pageSize))
 	if err != nil {
-		// TODO: log
 		c.JSON(http.StatusOK, errno.ConstructErrResp(string(rune(errno.ERROR)), err.Error()))
 		return
 	}
@@ -33,7 +32,12 @@ func ListArticles(c *gin.Context) {
 	for _, item := range articles {
 		result = append(result, convArticleDO2DTO(item))
 	}
-	c.JSON(http.StatusOK, errno.ConstructResp("", "", &dto.ListArticlesResponse{Articles: result}))
+	c.JSON(http.StatusOK, errno.ConstructResp("", "", &dto.ListArticlesResponse{
+		Articles: result,
+		PageNo:   int64(pageNum),
+		PageSize: int64(pageSize),
+		Total:    total,
+	}))
 	return
 }
 
