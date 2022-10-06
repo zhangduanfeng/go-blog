@@ -23,7 +23,8 @@ func ListArticles(c *gin.Context) {
 	// query from db
 	articles, err := service.ListArticles(int64(pageNum), int64(pageSize))
 	if err != nil {
-		c.JSON(http.StatusOK, errno.ConstructErrResp(string(errno.ERROR), err.Error()))
+		// TODO: log
+		c.JSON(http.StatusOK, errno.ConstructErrResp(string(rune(errno.ERROR)), err.Error()))
 		return
 	}
 

@@ -3,9 +3,9 @@ package handler
 import (
 	_ "database/sql"
 	"errors"
+	"go-blog/errno"
 	"go-blog/model"
 	"go-blog/store"
-	"go-blog/utils/errmsg"
 	"net/http"
 	"strings"
 	"time"
@@ -61,13 +61,13 @@ func Login(c *gin.Context) {
 		//用户不存在
 		if result.Error.Error() == "record not found" {
 			c.JSON(http.StatusOK, gin.H{
-				"code":    errmsg.ERROR_USERNAME_NOT_EXIST,
-				"message": errmsg.GetErrmsg(errmsg.ERROR_USERNAME_NOT_EXIST),
+				"code":    errno.ERROR_USERNAME_NOT_EXIST,
+				"message": errno.GetErrmsg(errno.ERROR_USERNAME_NOT_EXIST),
 			})
 		} else {
 			c.JSON(http.StatusInternalServerError, gin.H{
 				"code":    0,
-				"message": errmsg.GetErrmsg(errmsg.ERROR),
+				"message": errno.GetErrmsg(errno.ERROR),
 			})
 		}
 		return
