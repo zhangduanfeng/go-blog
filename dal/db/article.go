@@ -33,3 +33,15 @@ func PageQueryArticles(offset, limit int64) ([]*model.Article, error) {
 
 	return articles, nil
 }
+
+func GetArticleById(id int64) (*model.Article, error) {
+	var article = &model.Article{}
+	err := store.DB.Debug().Where("id = ?", id).Find(&article).Error
+	if err != nil {
+		if err.Error() == "record not found" {
+			return article, nil
+		}
+		return nil, err
+	}
+	return article, nil
+}

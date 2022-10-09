@@ -36,7 +36,7 @@ func ListArticles(c *gin.Context) {
 	// query from db
 	articles, total, err := service.ListArticles(int64(pageNum), int64(pageSize))
 	if err != nil {
-		c.JSON(http.StatusOK, errno.ConstructErrResp(string(rune(errno.ERROR)), err.Error()))
+		c.JSON(http.StatusInternalServerError, errno.ConstructErrResp(string(rune(errno.ERROR)), err.Error()))
 		return
 	}
 
@@ -50,6 +50,27 @@ func ListArticles(c *gin.Context) {
 		PageNo:   int64(pageNum),
 		PageSize: int64(pageSize),
 		Total:    total,
+	}))
+	return
+}
+
+func PreviewArticle(c *gin.Context) {
+	articleId, _ := strconv.Atoi(c.DefaultQuery("articleId", "0"))
+
+	article, err := service.GetArticleById(int64(articleId))
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, errno.ConstructErrResp(string(rune(errno.ERROR)), err.Error()))
+		return
+	}
+
+	c.JSON(http.StatusOK, errno.ConstructResp("", "", &dto.Article{
+		Id:         article.Id,
+		CreateTime: article.CreateTime.String(),
+		CreateId:   article.CreateId,
+		UpdateId:   article.UpdateId,
+		UpdateTime: article.UpdateTime.String(),
+		Title:      article.Title,
+		Content:    article.Content,
 	}))
 	return
 }

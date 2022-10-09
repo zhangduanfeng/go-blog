@@ -1,6 +1,7 @@
 package service
 
 import (
+	"errors"
 	"go-blog/dal/db"
 	"go-blog/model"
 	"time"
@@ -24,6 +25,17 @@ func ListArticles(pageNo, pageSize int64) ([]*model.Article, int64, error) {
 		return nil, 0, err
 	}
 	return articles, count, nil
+}
+
+func GetArticleById(id int64) (*model.Article, error) {
+	article, err := db.GetArticleById(id)
+	if err != nil {
+		return nil, err
+	}
+	if article.Id == 0 {
+		return nil, errors.New("此文章不存在")
+	}
+	return article, nil
 }
 
 func CreateArticle(title, content string, createId int64) (int64, error) {
