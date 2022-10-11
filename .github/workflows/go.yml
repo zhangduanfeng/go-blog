@@ -36,7 +36,6 @@ jobs:
         run: |
           echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
           ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} '
-          yes
           cd /root/demo &&
           git clone https://github.com/zhangduanfeng/go-blog.git
           '
