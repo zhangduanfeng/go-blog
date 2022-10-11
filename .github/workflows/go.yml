@@ -39,3 +39,4 @@ jobs:
           yes
           cd /root/demo &&
           git clone https://github.com/zhangduanfeng/go-blog.git
+          '
