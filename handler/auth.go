@@ -6,6 +6,7 @@ import (
 	"go-blog/errno"
 	"go-blog/model"
 	"go-blog/store"
+	"go-blog/vo"
 	"net/http"
 	"strings"
 	"time"
@@ -56,7 +57,7 @@ func Login(c *gin.Context) {
 			"message": "参数解析异常",
 		})
 	}
-	result := store.DB.Where("username = ? AND password = ? AND valid = 0", user.Username, user.Password).First(&user)
+	result := store.DB.Debug().Where("username = ? AND password = ? AND valid = 0", user.Username, user.Password).First(&user)
 	if result.Error != nil {
 		//用户不存在
 		if result.Error.Error() == "record not found" {
@@ -78,6 +79,13 @@ func Login(c *gin.Context) {
 		Password: user.Password,
 		RoleId:   user.RoleId,
 	}
+	userInfo := &vo.User{
+		Id:         user.Id,
+		CreateTime: user.CreateTime.Format("2006-01-02 15:04:05"),
+		UpdateTime: user.UpdateTime.Format("2006-01-02 15:04:05"),
+		Username:   user.Username,
+		Password:   user.Password,
+	}
 	claims.IssuedAt = time.Now().Unix()
 	claims.ExpiresAt = time.Now().Add(time.Second * time.Duration(ExpireTime)).Unix()
 	//获取token
@@ -88,7 +96,7 @@ func Login(c *gin.Context) {
 	}
 	m := make(map[string]interface{})
 	m["token"] = signedToken
-	m["user_Info"] = user
+	m["user_Info"] = userInfo
 	c.JSON(http.StatusOK, gin.H{
 		"code": 1,
 		"data": m,
@@ -149,3 +157,5 @@ func GetToken(claims *JWTClaims) (string, error) {
 	signedToken = split[2]
 	return signedToken, nil
 }
+
+type Time time.Time

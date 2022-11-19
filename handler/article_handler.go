@@ -1,10 +1,10 @@
 package handler
 
 import (
-	"go-blog/dto"
 	"go-blog/errno"
 	"go-blog/model"
 	"go-blog/service"
+	"go-blog/vo"
 	"net/http"
 	"strconv"
 
@@ -12,7 +12,7 @@ import (
 )
 
 func CreateArticle(c *gin.Context) {
-	var req = &dto.CreateArticleRequest{}
+	var req = &vo.CreateArticleRequest{}
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(http.StatusOK, errno.ConstructErrResp(string(rune(errno.ERROR)), err.Error()))
 		return
@@ -22,7 +22,7 @@ func CreateArticle(c *gin.Context) {
 		c.JSON(http.StatusOK, errno.ConstructErrResp(string(rune(errno.ERROR)), err.Error()))
 		return
 	}
-	c.JSON(http.StatusOK, errno.ConstructResp("", "", &dto.CreateArticleResponse{
+	c.JSON(http.StatusOK, errno.ConstructResp("", "", &vo.CreateArticleResponse{
 		ArticleId: id,
 	}))
 	return
@@ -41,11 +41,11 @@ func ListArticles(c *gin.Context) {
 	}
 
 	// conv resp
-	var result = make([]*dto.Article, 0)
+	var result = make([]*vo.Article, 0)
 	for _, item := range articles {
-		result = append(result, convArticleDO2DTO(item))
+		result = append(result, convArticleDO2VO(item))
 	}
-	c.JSON(http.StatusOK, errno.ConstructResp("", "", &dto.ListArticlesResponse{
+	c.JSON(http.StatusOK, errno.ConstructResp("", "", &vo.ListArticlesResponse{
 		Articles: result,
 		PageNo:   int64(pageNum),
 		PageSize: int64(pageSize),
@@ -54,8 +54,8 @@ func ListArticles(c *gin.Context) {
 	return
 }
 
-func convArticleDO2DTO(article *model.Article) *dto.Article {
-	var result = &dto.Article{
+func convArticleDO2VO(article *model.Article) *vo.Article {
+	var result = &vo.Article{
 		Id:         article.Id,
 		CreateTime: article.CreateTime.String(),
 		CreateId:   article.CreateId,

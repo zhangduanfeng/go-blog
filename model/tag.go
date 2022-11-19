@@ -6,7 +6,7 @@ type Tag struct {
 	Code       string `json:"code"`
 	Name       string `json:"name"`
 	Valid      int64  `json:"valid"`
-	Extra      string `json:"extra"`
+	Sequence   int64  `json:"sequence"`
 	CreateTime string `json:"create_time"`
 	UpdateTime string `json:"update_time"`
 }
