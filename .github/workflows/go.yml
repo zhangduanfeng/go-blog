@@ -1,0 +1,30 @@
+name: Go
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  Deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Deploy in CVM
+        env:
+            PRIVATE_KEY: ${{ secrets.CVM_SSH_KEY  }}
+            HOSTNAME : ${{ secrets.CVM_IP  }}
+            USER_NAME : ${{ secrets.CVM_USER  }}
+            PASS_WORD : ${{ secrets.CVM_PASSWORD }}
+            
+        run: |
+          echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
+          ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} '
+          cd /root/demo/go-blog &&
+          git pull &&
+          go build -o zdf_xbh_blog &&
+          chmod 777 zdf_xbh_blog &&
+          killall zdf_xbh_blog &&
+          nohup ./zdf_xbh_blog &
+          '
