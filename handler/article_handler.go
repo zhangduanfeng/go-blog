@@ -63,7 +63,7 @@ func PreviewArticle(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, errno.ConstructResp("", "", &dto.Article{
+	c.JSON(http.StatusOK, errno.ConstructResp("", "", &vo.Article{
 		Id:         article.Id,
 		CreateTime: article.CreateTime.String(),
 		CreateId:   article.CreateId,
