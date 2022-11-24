@@ -7,11 +7,11 @@ import (
 	"time"
 )
 
-func ListArticles(pageNo, pageSize int64) ([]*model.Article, int64, error) {
+func ListArticles(pageNo, pageSize int64, searchTitle string) ([]*model.Article, int64, error) {
 	var articles = make([]*model.Article, 0)
 
 	//分页
-	count, err := db.CountArticles()
+	count, err := db.CountArticles(searchTitle)
 	if err != nil {
 		return nil, 0, err
 	}
@@ -20,7 +20,7 @@ func ListArticles(pageNo, pageSize int64) ([]*model.Article, int64, error) {
 		return articles, 0, nil
 	}
 
-	articles, err = db.PageQueryArticles((pageNo-1)*pageSize, pageSize)
+	articles, err = db.PageQueryArticles(searchTitle, (pageNo-1)*pageSize, pageSize)
 	if err != nil {
 		return nil, 0, err
 	}
