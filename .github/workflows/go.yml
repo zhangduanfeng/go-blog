@@ -17,6 +17,7 @@ jobs:
           switches: -avzr --delete
           path: vo/
           remote_path: /root/code/
+          remote_port: 22
           remote_host: ${{ secrets.CVM_IP  }}
           remote_user: ${{ secrets.CVM_USER  }}
           remote_key: ${{ secrets.CVM_SSH_KEY  }}
