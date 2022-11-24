@@ -20,5 +20,4 @@ jobs:
           remote_host: ${{ secrets.CVM_IP  }}
           remote_user: ${{ secrets.CVM_USER  }}
           remote_key: ${{ secrets.CVM_SSH_KEY  }}
-          remote_key_pass: ${{ secrets.CVM_PASSWORD }}
     
