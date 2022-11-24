@@ -52,7 +52,6 @@ func ListArticles(c *gin.Context) {
 		PageSize: int64(pageSize),
 		Total:    total,
 	}))
-	return
 }
 
 func PreviewArticle(c *gin.Context) {
