@@ -32,6 +32,7 @@ func ListArticles(c *gin.Context) {
 	// request params
 	pageNum, _ := strconv.Atoi(c.DefaultQuery("pageNum", "1"))
 	pageSize, _ := strconv.Atoi(c.DefaultQuery("pageSize", "10"))
+	// searchTitle, _ := c.DefaultQuery("search_title", "")
 
 	// query from db
 	articles, total, err := service.ListArticles(int64(pageNum), int64(pageSize))

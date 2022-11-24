@@ -1,10 +1,12 @@
 package handler
 
 import (
+	"context"
 	_ "database/sql"
 	"errors"
 	"go-blog/errno"
 	"go-blog/model"
+	"go-blog/service"
 	"go-blog/store"
 	"go-blog/vo"
 	"net/http"
@@ -101,6 +103,23 @@ func Login(c *gin.Context) {
 		"code": 1,
 		"data": m,
 	})
+}
+
+func Register(c *gin.Context) {
+	var req vo.RegisterReq
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":    0,
+			"message": "参数解析异常",
+		})
+	}
+
+	if err := service.CreateUser(context.Background(), req.UserName, req.PassWord); err != nil {
+		c.JSON(http.StatusInternalServerError, errno.ConstructErrResp(string(rune(errno.ERROR)), err.Error()))
+		return
+	}
+	c.JSON(http.StatusOK, errno.ConstructResp("", "", nil))
+	return
 }
 
 //func Verify(c *gin.Context) {

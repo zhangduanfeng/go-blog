@@ -14,3 +14,8 @@ type User struct {
 	//RoleId     int64  `json:"role" validate:"required" label:"角色ID"`
 	Valid int `json:"valid" label:"是否有效0-有效1-无效"`
 }
+
+type RegisterReq struct {
+	UserName string `json:"user_name"`
+	PassWord string `json:"pass_word"`
+}
