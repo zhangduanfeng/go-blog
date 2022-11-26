@@ -17,4 +17,5 @@ jobs:
             SSH_PRIVATE_KEY:  ${{ secrets.CVM_SSH_KEY  }}
             REMOTE_HOST: ${{ secrets.CVM_IP  }}
             REMOTE_USER: ${{ secrets.CVM_USER  }}
+            TARGET: "/data/blog-x"
             SOURCE: "/"
