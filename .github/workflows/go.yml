@@ -1,37 +1,30 @@
 name: Go
+
 on:
-  push: 
-    branches: [ main ]  #main分支在push的时候会触发
+  push:
+    branches: [ "master" ]
   pull_request:
-    branches: [ main ] #main分支在PR的时候会触发
+    branches: [ "master" ]
 
 jobs:
-  build:
-
-    runs-on: ubuntu-latest #nodejs执行的操作系统
-
-    strategy:
-      matrix:
-        node-version: [16.14] #选择你需要的nodejs版本
+  Deploy:
+    runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2 
-    - name: 使用 Node.js ${{ matrix.node-version }}开始搞事情
-      uses: actions/setup-node@v2
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    - run: npm install
-    - run: npm run build
-    - name: Deploy 🚀
-      uses: cross-the-world/scp-pipeline@master
-      env:
-          WELCOME: "ssh scp ssh pipelines"
-          LASTSSH: "Doing something after copying"
-      with:
-         host: ${{ secrets.DR_HOST }}
-         user: ${{ secrets.DR_USER }}
-         pass: ${{ secrets.DR_PASS }}
-         connect_timeout: 10s
-         local: './my-project/dist/*' # 这里是下一步要创建的vue项目构建完成后的静态资源路径
-         remote: /www/actionTest # 这里是 step1 中，在服务器上创建用于存放静态资源的文件夹
+      - name: Deploy in CVM
+        env:
+          PRIVATE_KEY: ${{ secrets.CVM_SSH_KEY  }}
+          HOSTNAME : ${{ secrets.CVM_IP  }}
+          USER_NAME : ${{ secrets.CVM_USER  }}
+          PASS_WORD : ${{ secrets.CVM_PASSWORD }}
+
+        run: |
+          echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
+          ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} '
+          cd /data/blog-x/go-blog;
+          git pull;
+          go build -o blog;
+          chmod 777 blog;
+          killall blog;
+          nohup ./blog > /root/out.log 2>&1 &
+          '
