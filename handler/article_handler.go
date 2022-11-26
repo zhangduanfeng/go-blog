@@ -11,6 +11,11 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+/**
+ * @Description 发布文章
+ * @Param
+ * @return
+ **/
 func CreateArticle(c *gin.Context) {
 	var req = &vo.CreateArticleRequest{}
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -28,6 +33,11 @@ func CreateArticle(c *gin.Context) {
 	return
 }
 
+/**
+ * @Description 文章列表
+ * @Param
+ * @return
+ **/
 func ListArticles(c *gin.Context) {
 	// request params
 	pageNum, _ := strconv.Atoi(c.DefaultQuery("pageNum", "1"))
@@ -54,7 +64,12 @@ func ListArticles(c *gin.Context) {
 	return
 }
 
-func PreviewArticle(c *gin.Context) {
+/**
+ * @Description 文章详情
+ * @Param
+ * @return
+ **/
+func ArticleDetails(c *gin.Context) {
 	articleId, _ := strconv.Atoi(c.DefaultQuery("articleId", "0"))
 
 	article, err := service.GetArticleById(int64(articleId))

@@ -12,7 +12,7 @@ import (
  **/
 func QueryTags() ([]*model.Tag, error) {
 	var tags = make([]*model.Tag, 0)
-	err := store.DB.Debug().Order("id DESC").Find(&tags).Error
+	err := store.DB.Debug().Order("id").Find(&tags).Error
 	if err != nil {
 		if err.Error() == "record not found" {
 			return tags, nil
@@ -30,7 +30,7 @@ func QueryTags() ([]*model.Tag, error) {
  **/
 func QueryCategory() ([]*model.Category, error) {
 	var categorys = make([]*model.Category, 0)
-	err := store.DB.Debug().Order("id DESC").Find(&categorys).Error
+	err := store.DB.Debug().Order("id").Find(&categorys).Error
 	if err != nil {
 		if err.Error() == "record not found" {
 			return categorys, nil

@@ -8,19 +8,25 @@ type ListArticlesResponse struct {
 }
 
 type Article struct {
-	Id         int64  `json:"id"`
-	CreateTime string `json:"createTime"`
-	CreateId   int64  `json:"createId"`
-	UpdateId   int64  `json:"updateId"`
-	UpdateTime string `json:"updateTime"`
-	Title      string `json:"title"`
-	Content    string `json:"content"`
+	Id          int64        `json:"id"`
+	CreateTime  string       `json:"createTime"`
+	CreateId    int64        `json:"createId"`
+	UpdateId    int64        `json:"updateId"`
+	UpdateTime  string       `json:"updateTime"`
+	Title       string       `json:"title"`
+	Content     string       `json:"content"`
+	ArticleTags []ArticleTag `json:"articleTags"`
 }
 
 type CreateArticleRequest struct {
 	Title    string
 	Content  string
 	CreateId int64
+}
+
+type ArticleTag struct {
+	Id      int64  `json:"id"`
+	TagName string `json:"tagName"`
 }
 
 type CreateArticleResponse struct {
