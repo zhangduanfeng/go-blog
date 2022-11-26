@@ -21,7 +21,7 @@ jobs:
         run: |
           echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
           ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} '
-          /data/blog-x/go-blog &&
+          cd /data/blog-x/go-blog &&
           git pull &&
           go build -o blog &&
           chmod 777 blog &&
