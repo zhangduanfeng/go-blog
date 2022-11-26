@@ -10,15 +10,11 @@ jobs:
   Deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - name: rsync deployments
-        uses: burnett01/rsync-deployments@5.2.1
+      - uses: garygrossgarten/github-action-ssh@release
         with:
-          switches: -avzr --delete
-          path: vo/
-          remote_path: /root/code/
-          remote_port: 22
-          remote_host: ${{ secrets.CVM_IP  }}
-          remote_user: ${{ secrets.CVM_USER  }}
-          remote_key: ${{ secrets.CVM_SSH_KEY  }}
+          command: ls -a
+          host:  ${{ secrets.CVM_IP  }}
+          username: root
+          port: 22
+          privateKey: ${{ secrets.CVM_SSH_KEY  }}
     
