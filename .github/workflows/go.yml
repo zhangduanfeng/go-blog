@@ -9,12 +9,14 @@ on:
 jobs:
   Deploy:
     runs-on: ubuntu-latest
-    steps:
-      - uses: garygrossgarten/github-action-ssh@release
-        with:
-          command: ls -a
-          host:  ${{ secrets.CVM_IP  }}
-          username: root
-          port: 22
-          privateKey: ${{ secrets.CVM_SSH_KEY  }}
     
+    steps:
+      - name: Deploy to Server
+        uses: easingthemes/ssh-deploy@main
+        env:
+            SSH_PRIVATE_KEY:  ${{ secrets.CVM_SSH_KEY  }}
+            ARGS: "ls -f"
+            SOURCE: "src/"
+            REMOTE_HOST: ${{ secrets.CVM_IP  }}
+            REMOTE_USER: root
+            TARGET: "/"
