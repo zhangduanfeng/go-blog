@@ -74,7 +74,7 @@ func ListArticles(c *gin.Context) {
 	for _, item := range articles {
 		var cateInfo = &model.Category{}
 		cateInfo = cateMap[item.CateId]
-		result = append(result, convArticleDO2VO(item, cateInfo))
+		result = append(result, convArticleDO2VO(item, cateInfo, nil))
 	}
 	c.JSON(http.StatusOK, errno.ConstructResp("", "", &vo.ListArticlesResponse{
 		Articles: result,
@@ -91,6 +91,28 @@ func ListArticles(c *gin.Context) {
  **/
 func ArticleDetails(c *gin.Context) {
 	articleId, _ := strconv.Atoi(c.DefaultQuery("articleId", "0"))
+	//根据文章id查询标签
+	tagIds, err := service.GetTagByArticleId(int64(articleId))
+	if err != nil {
+		c.JSON(http.StatusOK, errno.ConstructErrResp(string(rune(errno.ERROR)), err.Error()))
+		return
+	}
+	var articleTags = make([]*vo.ArticleTag, 0)
+
+	if len(tagIds) != 0 {
+		tagNames, err := service.GetTagNameById(tagIds)
+		if err != nil {
+			c.JSON(http.StatusOK, errno.ConstructErrResp(string(rune(errno.ERROR)), err.Error()))
+			return
+		}
+		for _, tag := range tagNames {
+			var result = &vo.ArticleTag{
+				Id:      tag.Id,
+				TagName: tag.Name,
+			}
+			articleTags = append(articleTags, result)
+		}
+	}
 
 	article, err := service.GetArticleById(int64(articleId))
 	if err != nil {
@@ -104,20 +126,21 @@ func ArticleDetails(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, errno.ConstructResp("", "", convArticleDO2VO(article, cateInfo)))
+	c.JSON(http.StatusOK, errno.ConstructResp("", "", convArticleDO2VO(article, cateInfo, articleTags)))
 }
 
-func convArticleDO2VO(article *model.Article, cateInfo *model.Category) *vo.Article {
+func convArticleDO2VO(article *model.Article, cateInfo *model.Category, tagsInfos []*vo.ArticleTag) *vo.Article {
 	var result = &vo.Article{
-		Id:         article.Id,
-		CreateTime: article.CreateTime.String(),
-		CreateId:   article.CreateId,
-		UpdateId:   article.UpdateId,
-		UpdateTime: article.UpdateTime.String(),
-		Title:      article.Title,
-		Content:    article.Content,
-		CoverImg:   article.CoverImg,
-		Summary:    article.Summary,
+		Id:          article.Id,
+		CreateTime:  article.CreateTime.String(),
+		CreateId:    article.CreateId,
+		UpdateId:    article.UpdateId,
+		UpdateTime:  article.UpdateTime.String(),
+		Title:       article.Title,
+		Content:     article.Content,
+		CoverImg:    article.CoverImg,
+		Summary:     article.Summary,
+		ArticleTags: tagsInfos,
 	}
 	if cateInfo != nil {
 		result.CateInfo = &vo.Category{
