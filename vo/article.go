@@ -18,9 +18,9 @@ type Article struct {
 }
 
 type CreateArticleRequest struct {
-	Title    string
-	Content  string
-	CreateId int64
+	Title    string `json:"title"`
+	Content  string `json:"content"`
+	CreateId int64 `json:"create_id"`
 }
 
 type CreateArticleResponse struct {
