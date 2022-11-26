@@ -132,10 +132,10 @@ func ArticleDetails(c *gin.Context) {
 func convArticleDO2VO(article *model.Article, cateInfo *model.Category, tagsInfos []*vo.ArticleTag) *vo.Article {
 	var result = &vo.Article{
 		Id:          article.Id,
-		CreateTime:  article.CreateTime.String(),
+		CreateTime:  article.CreateTime.Format("2006-01-02 15:04:05"),
 		CreateId:    article.CreateId,
 		UpdateId:    article.UpdateId,
-		UpdateTime:  article.UpdateTime.String(),
+		UpdateTime:  article.UpdateTime.Format("2006-01-02 15:04:05"),
 		Title:       article.Title,
 		Content:     article.Content,
 		CoverImg:    article.CoverImg,
