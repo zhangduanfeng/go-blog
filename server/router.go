@@ -21,7 +21,7 @@ func NewRouter() *gin.Engine {
 	r.POST("/register", handler.Register)
 
 	r.GET("/article/list", handler.ListArticles)
-	r.GET("/article/preview", handler.ArticleDetails)
+	r.GET("/article/details", handler.ArticleDetails)
 	r.POST("/article/create", handler.CreateArticle)
 	r.POST("/upload", handler.Upload)
 	r.GET("/category/list", handler.ListCategoryAndTag)
