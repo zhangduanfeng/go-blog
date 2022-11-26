@@ -15,9 +15,5 @@ jobs:
         uses: easingthemes/ssh-deploy@main
         env:
             SSH_PRIVATE_KEY:  ${{ secrets.CVM_SSH_KEY  }}
-            ARGS: "ls -f"
-            SOURCE: "src/"
             REMOTE_HOST: ${{ secrets.CVM_IP  }}
-            REMOTE_USER: "root"
-            TARGET: "/"
-            EXCLUDE: "/dist/, /node_modules/"
+            REMOTE_USER: ${{ secrets.CVM_USER  }}
