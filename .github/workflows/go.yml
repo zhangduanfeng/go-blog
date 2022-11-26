@@ -1,5 +1,4 @@
-name: Node.js CI
-# on 表示触发actions的条件
+name: Go
 on:
   push: 
     branches: [ main ]  #main分支在push的时候会触发
