@@ -47,6 +47,8 @@ func CreateArticle(title, content string, createId int64) (int64, error) {
 		CreateTime: time.Now(),
 		UpdateTime: time.Now(),
 	}
+	article.Summary = ""
+	article.CoverImgs = ""
 	return db.CreateArticles(article)
 }
 

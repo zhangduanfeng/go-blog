@@ -11,9 +11,20 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-      - name: Deploy to Server
-        uses: easingthemes/ssh-deploy@main
+      - name: Deploy in CVM
         env:
-            SSH_PRIVATE_KEY:  ${{ secrets.CVM_SSH_KEY  }}
-            REMOTE_HOST: ${{ secrets.CVM_IP  }}
-            REMOTE_USER: ${{ secrets.CVM_USER  }}
+            PRIVATE_KEY: ${{ secrets.CVM_SSH_KEY  }}
+            HOSTNAME : ${{ secrets.CVM_IP  }}
+            USER_NAME : ${{ secrets.CVM_USER  }}
+            PASS_WORD : ${{ secrets.CVM_PASSWORD }}
+            
+        run: |
+          echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
+          ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} '
+          cd /data/blog-x/go-blog;
+          git pull;
+          go build -o blog;
+          chmod 777 blog;
+          killall blog;
+          nohup ./blog > /root/out.log 2>&1 &
+          '
