@@ -17,6 +17,7 @@ type Tag struct {
 }
 
 type Category struct {
+	Id       int64  `json:"id"`
 	Name     string `json:"name"`
 	Sequence int64  `json:"sequence"`
 }

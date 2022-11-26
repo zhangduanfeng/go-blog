@@ -16,6 +16,7 @@ type Article struct {
 	Title      string    `json:"title" validate:"required" label:"文章标题"`
 	Content    string    `json:"content" validate:"required" label:"文章内容"`
 	Summary    string    `json:"summary"`
-	CoverImgs  string    `json:"cover_imgs"`
+	CoverImg   string    `json:"cover_img"`
+	CateId     int64     `json:"cate_id"`
 	Valid      int64     `json:"valid" label:"是否有效0-有效1-无效"`
 }

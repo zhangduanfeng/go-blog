@@ -38,7 +38,7 @@ func GetArticleById(id int64) (*model.Article, error) {
 	return article, nil
 }
 
-func CreateArticle(title, content string, createId int64) (int64, error) {
+func CreateArticle(title, content, summary, coverImg string, cateId, createId int64) (int64, error) {
 	var article = &model.Article{
 		CreateId:   createId,
 		UpdateId:   createId,
@@ -46,8 +46,9 @@ func CreateArticle(title, content string, createId int64) (int64, error) {
 		Content:    content,
 		CreateTime: time.Now(),
 		UpdateTime: time.Now(),
+		Summary:    summary,
+		CoverImg:   coverImg,
+		CateId:     cateId,
 	}
-	article.Summary = ""
-	article.CoverImgs = ""
 	return db.CreateArticles(article)
 }

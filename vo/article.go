@@ -15,13 +15,19 @@ type Article struct {
 	UpdateTime  string       `json:"updateTime"`
 	Title       string       `json:"title"`
 	Content     string       `json:"content"`
+	Summary     string       `json:"summary"`
+	CoverImg    string       `json:"cover_img"`
 	ArticleTags []ArticleTag `json:"articleTags"`
+	CateInfo    *Category    `json:"cate_info"`
 }
 
 type CreateArticleRequest struct {
 	Title    string `json:"title"`
 	Content  string `json:"content"`
-	CreateId int64 `json:"create_id"`
+	CreateId int64  `json:"create_id"`
+	Summary  string `json:"summary"`
+	CoverImg string `json:"cover_img"`
+	Cate     int64  `json:"cate"`
 }
 
 type ArticleTag struct {

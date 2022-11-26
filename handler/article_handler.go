@@ -25,7 +25,7 @@ func CreateArticle(c *gin.Context) {
 	if req.CreateId == 0 {
 		req.CreateId = 10
 	}
-	id, err := service.CreateArticle(req.Title, req.Content, req.CreateId)
+	id, err := service.CreateArticle(req.Title, req.Content, req.Summary, req.Summary, req.Cate, req.CreateId)
 	if err != nil {
 		c.JSON(http.StatusOK, errno.ConstructErrResp(string(rune(errno.ERROR)), err.Error()))
 		return
@@ -53,10 +53,28 @@ func ListArticles(c *gin.Context) {
 		return
 	}
 
+	var cateIds = make([]int64, 0)
+	// 后续ES/缓存优化
+	for _, item := range articles {
+		cateIds = append(cateIds, item.CateId)
+	}
+
+	cateInfos, err := service.GetCategoryByIds(cateIds)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, errno.ConstructErrResp(string(rune(errno.ERROR)), err.Error()))
+		return
+	}
+
 	// conv resp
 	var result = make([]*vo.Article, 0)
+	var cateMap = make(map[int64]*model.Category)
+	for _, cate := range cateInfos {
+		cateMap[cate.Id] = cate
+	}
 	for _, item := range articles {
-		result = append(result, convArticleDO2VO(item))
+		var cateInfo = &model.Category{}
+		cateInfo = cateMap[item.CateId]
+		result = append(result, convArticleDO2VO(item, cateInfo))
 	}
 	c.JSON(http.StatusOK, errno.ConstructResp("", "", &vo.ListArticlesResponse{
 		Articles: result,
@@ -80,19 +98,16 @@ func ArticleDetails(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, errno.ConstructResp("", "", &vo.Article{
-		Id:         article.Id,
-		CreateTime: article.CreateTime.String(),
-		CreateId:   article.CreateId,
-		UpdateId:   article.UpdateId,
-		UpdateTime: article.UpdateTime.String(),
-		Title:      article.Title,
-		Content:    article.Content,
-	}))
-	return
+	cateInfo, err := service.GetCategoryById(article.CateId)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, errno.ConstructErrResp(string(rune(errno.ERROR)), err.Error()))
+		return
+	}
+
+	c.JSON(http.StatusOK, errno.ConstructResp("", "", convArticleDO2VO(article, cateInfo)))
 }
 
-func convArticleDO2VO(article *model.Article) *vo.Article {
+func convArticleDO2VO(article *model.Article, cateInfo *model.Category) *vo.Article {
 	var result = &vo.Article{
 		Id:         article.Id,
 		CreateTime: article.CreateTime.String(),
@@ -101,6 +116,15 @@ func convArticleDO2VO(article *model.Article) *vo.Article {
 		UpdateTime: article.UpdateTime.String(),
 		Title:      article.Title,
 		Content:    article.Content,
+		CoverImg:   article.CoverImg,
+		Summary:    article.Summary,
+	}
+	if cateInfo != nil {
+		result.CateInfo = &vo.Category{
+			Id:       cateInfo.Id,
+			Name:     cateInfo.Name,
+			Sequence: cateInfo.Sequence,
+		}
 	}
 	return result
 }

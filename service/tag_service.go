@@ -25,3 +25,23 @@ func ListTags() ([]*model.Tag, error) {
 	}
 	return tags, nil
 }
+
+func GetCategoryById(cateId int64) (*model.Category, error) {
+	category, err := db.GetCategoryById(cateId)
+	if err != nil {
+		return nil, err
+	}
+	return category, nil
+}
+
+func GetCategoryByIds(cateIds []int64) ([]*model.Category, error) {
+	if len(cateIds) == 0 {
+		return nil, nil
+	}
+	categories, err := db.GetCategoriesByIds(cateIds)
+	if err != nil {
+		return nil, err
+	}
+	return categories, nil
+}
+
