@@ -20,3 +20,4 @@ jobs:
             REMOTE_HOST: ${{ secrets.CVM_IP  }}
             REMOTE_USER: "root"
             TARGET: "/"
+            EXCLUDE: "/dist/, /node_modules/"
