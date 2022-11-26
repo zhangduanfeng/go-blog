@@ -17,3 +17,4 @@ jobs:
             SSH_PRIVATE_KEY:  ${{ secrets.CVM_SSH_KEY  }}
             REMOTE_HOST: ${{ secrets.CVM_IP  }}
             REMOTE_USER: ${{ secrets.CVM_USER  }}
+            ARGS: "ls -f"
