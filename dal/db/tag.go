@@ -40,3 +40,16 @@ func QueryCategory() ([]*model.Category, error) {
 
 	return categorys, nil
 }
+
+func GetTagNameById(tagIds []int64) ([]*model.Tag, error) {
+	var tags = make([]*model.Tag, 0)
+	err := store.DB.Debug().Table("tag").Select("id,name").Where("id in (?)", tagIds).Find(&tags).Error
+	if err != nil {
+		if err.Error() == "record not found" {
+			return tags, nil
+		}
+		return nil, err
+	}
+
+	return tags, nil
+}

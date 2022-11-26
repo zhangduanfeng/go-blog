@@ -49,3 +49,19 @@ func CreateArticle(title, content string, createId int64) (int64, error) {
 	}
 	return db.CreateArticles(article)
 }
+
+func GetTagByArticleId(articleId int64) ([]int64, error) {
+	tagIds, err := db.GetTagByArticleId(articleId)
+	if err != nil {
+		return nil, err
+	}
+	return tagIds, nil
+}
+
+func GetTagNameById(tadIds []int64) ([]*model.Tag, error) {
+	tagNames, err := db.GetTagNameById(tadIds)
+	if err != nil {
+		return nil, err
+	}
+	return tagNames, nil
+}
