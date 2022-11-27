@@ -45,3 +45,10 @@ func GetCategoryByIds(cateIds []int64) ([]*model.Category, error) {
 	return categories, nil
 }
 
+func GetArticleByTagId(tagId int64) ([]int64, error) {
+	articleIds, err := db.GetArticleByTagId(tagId)
+	if err != nil {
+		return nil, err
+	}
+	return articleIds, nil
+}

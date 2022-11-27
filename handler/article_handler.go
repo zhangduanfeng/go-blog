@@ -44,10 +44,15 @@ func ListArticles(c *gin.Context) {
 	// request params
 	pageNum, _ := strconv.Atoi(c.DefaultQuery("pageNum", "1"))
 	pageSize, _ := strconv.Atoi(c.DefaultQuery("pageSize", "10"))
+	tagId, _ := strconv.Atoi(c.DefaultQuery("tagId", ""))
 	searchTitle := c.DefaultQuery("searchTitle", "")
-
+	articleIds, err := service.GetArticleByTagId(int64(tagId))
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, errno.ConstructErrResp(string(rune(errno.ERROR)), err.Error()))
+		return
+	}
 	// query from db
-	articles, total, err := service.ListArticles(int64(pageNum), int64(pageSize), searchTitle)
+	articles, total, err := service.ListArticles(articleIds, int64(pageNum), int64(pageSize), searchTitle)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, errno.ConstructErrResp(string(rune(errno.ERROR)), err.Error()))
 		return

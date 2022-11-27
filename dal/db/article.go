@@ -27,11 +27,14 @@ func CreateArticles(article *model.Article) (int64, error) {
 	return article.Id, nil
 }
 
-func PageQueryArticles(searchTitle string, offset, limit int64) ([]*model.Article, error) {
+func PageQueryArticles(articleIds []int64, searchTitle string, offset, limit int64) ([]*model.Article, error) {
 	var articles = make([]*model.Article, 0)
 	db := store.DB.Debug().Table("article")
 	if searchTitle != "" {
 		db = db.Where("title like ?", fmt.Sprintf("%%%s%%", searchTitle))
+	}
+	if len(articleIds) != 0 {
+		db = db.Where("id in (?)", articleIds)
 	}
 	err := db.Order("id DESC").Offset(offset).Limit(limit).Find(&articles).Error
 	if err != nil {
