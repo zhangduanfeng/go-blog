@@ -56,6 +56,7 @@ func convTagDO2VO(tag *model.Tag) *vo.Tag {
 
 func convCategoryDO2VO(category *model.Category) *vo.Category {
 	var result = &vo.Category{
+		Id:       category.Id,
 		Name:     category.Name,
 		Sequence: category.Sequence,
 	}
