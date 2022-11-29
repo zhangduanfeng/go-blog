@@ -23,6 +23,8 @@ func NewRouter() *gin.Engine {
 	r.GET("/article/list", handler.ListArticles)
 	r.GET("/article/details", handler.ArticleDetails)
 	r.POST("/article/create", handler.CreateArticle)
+	r.POST("/article/publish", handler.PublishArticle)
+	r.POST("/article/save", handler.SaveArticle)
 	r.POST("/upload", handler.Upload)
 	r.GET("/category/list", handler.ListCategoryAndTag)
 	return r

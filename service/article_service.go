@@ -53,6 +53,29 @@ func CreateArticle(title, content, summary, coverImg string, cateId, createId in
 	return db.CreateArticles(article)
 }
 
+func UpdateArticle(articleId int64, title, content, summary, coverImg *string, cateId *int64, updateId, status int64) error {
+	var updateInfo = make(map[string]interface{}, 0)
+	if title != nil {
+		updateInfo["title"] = title
+	}
+	if content != nil {
+		updateInfo["content"] = content
+	}
+	if summary != nil {
+		updateInfo["summary"] = content
+	}
+	if coverImg != nil {
+		updateInfo["cover_img"] = content
+	}
+	if cateId != nil {
+		updateInfo["cate_id"] = content
+	}
+	updateInfo["update_time"] = time.Now()
+	updateInfo["update_id"] = updateId
+	updateInfo["status"] = status
+	return db.UpdateArticle(updateInfo, articleId)
+}
+
 func GetTagByArticleId(articleId int64) ([]int64, error) {
 	tagIds, err := db.GetTagByArticleId(articleId)
 	if err != nil {

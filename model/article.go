@@ -19,4 +19,5 @@ type Article struct {
 	CoverImg   string    `json:"cover_img"`
 	CateId     int64     `json:"cate_id"`
 	Valid      int64     `json:"valid" label:"是否有效0-有效1-无效"`
+	Status     int64     `json:"status"`
 }

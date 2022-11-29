@@ -35,6 +35,32 @@ func CreateArticle(c *gin.Context) {
 	}))
 }
 
+func SaveArticle(c *gin.Context) {
+	var req = &vo.SaveArticleRequest{}
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusOK, errno.ConstructErrResp(string(rune(errno.ERROR)), err.Error()))
+		return
+	}
+	if err := service.UpdateArticle(req.ArticleId, &req.Title, &req.Content, &req.Summary, &req.CoverImg, &req.Cate, 10, 0); err != nil {
+		c.JSON(http.StatusOK, errno.ConstructErrResp(string(rune(errno.ERROR)), err.Error()))
+		return
+	}
+	c.JSON(http.StatusOK, errno.ConstructResp("", "", nil))
+}
+
+func PublishArticle(c *gin.Context) {
+	var req = &vo.PublishArticleRequest{}
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusOK, errno.ConstructErrResp(string(rune(errno.ERROR)), err.Error()))
+		return
+	}
+	if err := service.UpdateArticle(req.ArticleId, &req.Title, &req.Content, &req.Summary, &req.CoverImg, &req.Cate, 10, 1); err != nil {
+		c.JSON(http.StatusOK, errno.ConstructErrResp(string(rune(errno.ERROR)), err.Error()))
+		return
+	}
+	c.JSON(http.StatusOK, errno.ConstructResp("", "", nil))
+}
+
 /**
  * @Description 文章列表
  * @Param

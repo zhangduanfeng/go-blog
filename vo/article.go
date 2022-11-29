@@ -30,6 +30,24 @@ type CreateArticleRequest struct {
 	Cate     int64  `json:"cate"`
 }
 
+type SaveArticleRequest struct {
+	ArticleId int64  `json:"article_id"`
+	Title     string `json:"title"`
+	Content   string `json:"content"`
+	Summary   string `json:"summary"`
+	CoverImg  string `json:"cover_img"`
+	Cate      int64  `json:"cate"`
+}
+
+type PublishArticleRequest struct {
+	ArticleId int64  `json:"article_id"`
+	Title     string `json:"title"`
+	Content   string `json:"content"`
+	Summary   string `json:"summary"`
+	CoverImg  string `json:"cover_img"`
+	Cate      int64  `json:"cate"`
+}
+
 type ArticleTag struct {
 	Id      int64  `json:"id"`
 	TagName string `json:"tagName"`
