@@ -22,12 +22,7 @@ type Article struct {
 }
 
 type CreateArticleRequest struct {
-	Title    string `json:"title"`
-	Content  string `json:"content"`
-	CreateId int64  `json:"create_id"`
-	Summary  string `json:"summary"`
-	CoverImg string `json:"cover_img"`
-	Cate     int64  `json:"cate"`
+	Title string `json:"title"`
 }
 
 type SaveArticleRequest struct {

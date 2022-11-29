@@ -22,10 +22,7 @@ func CreateArticle(c *gin.Context) {
 		c.JSON(http.StatusOK, errno.ConstructErrResp(string(rune(errno.ERROR)), err.Error()))
 		return
 	}
-	if req.CreateId == 0 {
-		req.CreateId = 10
-	}
-	id, err := service.CreateArticle(req.Title, req.Content, req.Summary, req.Summary, req.Cate, req.CreateId)
+	id, err := service.CreateArticle(req.Title, 10)
 	if err != nil {
 		c.JSON(http.StatusOK, errno.ConstructErrResp(string(rune(errno.ERROR)), err.Error()))
 		return
