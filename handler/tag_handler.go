@@ -47,6 +47,7 @@ func ListCategoryAndTag(c *gin.Context) {
 
 func convTagDO2VO(tag *model.Tag) *vo.Tag {
 	var result = &vo.Tag{
+		Id:       tag.Id,
 		Name:     tag.Name,
 		Code:     tag.Code,
 		Sequence: tag.Sequence,

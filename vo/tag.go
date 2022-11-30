@@ -11,6 +11,7 @@ type TagsResponse struct {
 }
 
 type Tag struct {
+	Id       int64  `json:"id"`
 	Code     string `json:"code"`
 	Sequence int64  `json:"sequence"`
 	Name     string `json:"name"`
