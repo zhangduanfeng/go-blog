@@ -12,7 +12,8 @@ type User struct {
 	Username   string `json:"username" validate:"required,min=4,max=12" label:"用户名"`
 	Password   string `json:"password" validate:"required,min=6,max=20" label:"密码"`
 	//RoleId     int64  `json:"role" validate:"required" label:"角色ID"`
-	Valid int `json:"valid" label:"是否有效0-有效1-无效"`
+	Valid        int    `json:"valid" label:"是否有效0-有效1-无效"`
+	HeadPortrait string `json:"headPortrait" label:"用户头像"`
 }
 
 type RegisterReq struct {

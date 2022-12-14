@@ -82,11 +82,12 @@ func Login(c *gin.Context) {
 		RoleId:   user.RoleId,
 	}
 	userInfo := &vo.User{
-		Id:         user.Id,
-		CreateTime: user.CreateTime.Format("2006-01-02 15:04:05"),
-		UpdateTime: user.UpdateTime.Format("2006-01-02 15:04:05"),
-		Username:   user.Username,
-		Password:   user.Password,
+		Id:           user.Id,
+		CreateTime:   user.CreateTime.Format("2006-01-02 15:04:05"),
+		UpdateTime:   user.UpdateTime.Format("2006-01-02 15:04:05"),
+		Username:     user.Username,
+		HeadPortrait: user.HeadPortrait,
+		Password:     user.Password,
 	}
 	claims.IssuedAt = time.Now().Unix()
 	claims.ExpiresAt = time.Now().Add(time.Second * time.Duration(ExpireTime)).Unix()
