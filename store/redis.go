@@ -2,8 +2,8 @@ package store
 
 import (
 	"context"
-	"fmt"
 	"github.com/go-redis/redis/v8"
+	"github.com/sirupsen/logrus"
 )
 
 /**
@@ -19,10 +19,11 @@ func InitRedis() *redis.Client {
 		PoolSize: 10,
 	})
 	result := rdb.Ping(context.Background())
-	fmt.Println("redis ping:", result.Val())
 	if result.Val() != "PONG" {
 		// 连接有问题
 		return nil
+	} else {
+		logrus.Info("redis连接成功")
 	}
 	return rdb
 }
