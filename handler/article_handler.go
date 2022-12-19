@@ -64,6 +64,16 @@ func PublishArticle(c *gin.Context) {
  * @return
  **/
 func ListArticles(c *gin.Context) {
+	//身份认证
+	checkUser, _, err := Verify(c) //第二个值是用户名，这里没有使用
+	if err != nil {
+		c.JSON(400, gin.H{"err": err.Error()})
+		return
+	}
+	if checkUser == false {
+		c.JSON(400, gin.H{"err": "token认证失败"})
+		return
+	}
 	// request params
 	pageNum, _ := strconv.Atoi(c.DefaultQuery("pageNum", "1"))
 	pageSize, _ := strconv.Atoi(c.DefaultQuery("pageSize", "10"))

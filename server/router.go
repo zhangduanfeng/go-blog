@@ -1,10 +1,25 @@
 package server
 
 import (
+	"crypto/md5"
+	"encoding/hex"
 	"go-blog/handler"
+	"net/http"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 )
+
+const (
+	// 可自定义盐值
+	TokenSalt = "default_salt"
+)
+
+func MD5(data []byte) string {
+	_md5 := md5.New()
+	_md5.Write(data)
+	return hex.EncodeToString(_md5.Sum([]byte("")))
+}
 
 // NewRouter 路由配置
 // 关于路由地址的几点想法
@@ -20,6 +35,9 @@ func NewRouter() *gin.Engine {
 	r.POST("/login", handler.Login)
 	r.POST("/register", handler.Register)
 
+	//以下的接口，都使用Authorize()中间件身份验证
+	r.Use(Authorize())
+
 	r.GET("/article/list", handler.ListArticles)
 	r.GET("/article/details", handler.ArticleDetails)
 	r.POST("/article/create", handler.CreateArticle)
@@ -28,4 +46,23 @@ func NewRouter() *gin.Engine {
 	r.POST("/upload", handler.Upload)
 	r.GET("/category/list", handler.ListCategoryAndTag)
 	return r
+}
+
+func Authorize() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		username := c.Query("username") // 用户名
+		ts := c.Query("ts")             // 时间戳
+		token := c.GetHeader("token")   // 访问令牌
+
+		if strings.ToLower(MD5([]byte(username+ts+TokenSalt))) == strings.ToLower(token) {
+			// 验证通过，会继续访问下一个中间件
+			c.Next()
+		} else {
+			// 验证不通过，不再调用后续的函数处理
+			c.Abort()
+			c.JSON(http.StatusUnauthorized, gin.H{"message": "访问未授权"})
+			// return可省略, 只要前面执行Abort()就可以让后面的handler函数不再执行
+			return
+		}
+	}
 }

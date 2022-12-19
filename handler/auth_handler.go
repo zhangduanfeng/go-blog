@@ -4,13 +4,13 @@ import (
 	"context"
 	_ "database/sql"
 	"errors"
+	"fmt"
 	"go-blog/errno"
 	"go-blog/model"
 	"go-blog/service"
 	"go-blog/store"
 	"go-blog/vo"
 	"net/http"
-	"strings"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
@@ -34,7 +34,7 @@ const (
 
 var (
 	Secret     = "dong_tech" // 加盐
-	ExpireTime = 3600        // token有效期
+	ExpireTime = 12          // token有效期
 )
 
 type JWTClaims struct { // token里面添加用户信息，验证token后可能会用到用户信息
@@ -90,7 +90,7 @@ func Login(c *gin.Context) {
 		Password:     user.Password,
 	}
 	claims.IssuedAt = time.Now().Unix()
-	claims.ExpiresAt = time.Now().Add(time.Second * time.Duration(ExpireTime)).Unix()
+	claims.ExpiresAt = time.Now().Add(time.Hour * time.Duration(ExpireTime)).Unix()
 	//获取token
 	signedToken, err := GetToken(claims)
 	if err != nil {
@@ -123,15 +123,22 @@ func Register(c *gin.Context) {
 	return
 }
 
-//func Verify(c *gin.Context) {
-//	strToken := c.Param("token")
-//	claim, err := verifyAction(strToken)
-//	if err != nil {
-//		c.String(http.StatusNotFound, err.Error())
-//		return
-//	}
-//	c.String(http.StatusOK, "verify,", claim.Username)
-//}
+/**
+ * @Description 身份鉴权
+ * @Param
+ * @return
+ **/
+func Verify(c *gin.Context) (result bool, userName string, err error) {
+	strToken := c.GetHeader("token")
+	claim, err := VerifyAction(strToken)
+	if err != nil {
+		result = false
+		return result, "", nil
+	}
+	result = true
+	userName = claim.Username
+	return result, userName, nil
+}
 
 //func Refresh(c *gin.Context) {
 //	strToken := c.Param("token")
@@ -149,23 +156,23 @@ func Register(c *gin.Context) {
 //	c.String(http.StatusOK, signedToken)
 //}
 
-//func VerifyAction(strToken string) (*JWTClaims, error) {
-//	token, err := jwt.ParseWithClaims(strToken, &JWTClaims{}, func(token *jwt.Token) (interface{}, error) {
-//		return []byte(Secret), nil
-//	})
-//	if err != nil {
-//		return nil, errors.New(ErrorReason_ServerBusy)
-//	}
-//	claims, ok := token.Claims.(*JWTClaims)
-//	if !ok {
-//		return nil, errors.New(ErrorReason_ReLogin)
-//	}
-//	if err := token.Claims.Valid(); err != nil {
-//		return nil, errors.New(ErrorReason_ReLogin)
-//	}
-//	fmt.Println("verify")
-//	return claims, nil
-//}
+func VerifyAction(strToken string) (*JWTClaims, error) {
+	token, err := jwt.ParseWithClaims(strToken, &JWTClaims{}, func(token *jwt.Token) (interface{}, error) {
+		return []byte(Secret), nil
+	})
+	if err != nil {
+		return nil, errors.New(ErrorReason_ServerBusy)
+	}
+	claims, ok := token.Claims.(*JWTClaims)
+	if !ok {
+		return nil, errors.New(ErrorReason_ReLogin)
+	}
+	if err := token.Claims.Valid(); err != nil {
+		return nil, errors.New(ErrorReason_ReLogin)
+	}
+	fmt.Println("verify")
+	return claims, nil
+}
 
 func GetToken(claims *JWTClaims) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
@@ -173,8 +180,8 @@ func GetToken(claims *JWTClaims) (string, error) {
 	if err != nil {
 		return "", errors.New(ErrorReason_ServerBusy)
 	}
-	split := strings.Split(signedToken, ".")
-	signedToken = split[2]
+	//split := strings.Split(signedToken, ".")
+	//signedToken = split[2]
 	return signedToken, nil
 }
 

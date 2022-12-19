@@ -8,7 +8,7 @@ import (
 
 var DB *gorm.DB
 
-func init() {
+func MysqlInit() {
 	var err error
 	DB, err = gorm.Open(
 		"mysql",
