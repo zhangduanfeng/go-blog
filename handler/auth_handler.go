@@ -5,6 +5,7 @@ import (
 	_ "database/sql"
 	"errors"
 	"fmt"
+	"github.com/goccy/go-json"
 	"go-blog/errno"
 	"go-blog/model"
 	"go-blog/service"
@@ -34,7 +35,7 @@ const (
 
 var (
 	Secret     = "dong_tech" // 加盐
-	ExpireTime = 12          // token有效期
+	ExpireTime = 12          // token有效期12小时
 )
 
 type JWTClaims struct { // token里面添加用户信息，验证token后可能会用到用户信息
@@ -91,10 +92,12 @@ func Login(c *gin.Context) {
 	}
 	claims.IssuedAt = time.Now().Unix()
 	claims.ExpiresAt = time.Now().Add(time.Hour * time.Duration(ExpireTime)).Unix()
-	//获取token
+	//获取token 存入redis
 	signedToken, err := GetToken(claims)
+	userInfoJSON, _ := json.Marshal(userInfo)
+	store.RedisClient.Set(store.Ctx, signedToken, userInfoJSON, time.Hour*12)
 	if err != nil {
-		c.String(http.StatusNotFound, err.Error())
+		c.String(http.StatusInternalServerError, err.Error())
 		return
 	}
 	m := make(map[string]interface{})
