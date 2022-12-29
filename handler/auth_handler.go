@@ -10,8 +10,10 @@ import (
 	"go-blog/model"
 	"go-blog/service"
 	"go-blog/store"
+	"go-blog/utils"
 	"go-blog/vo"
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
@@ -20,6 +22,7 @@ import (
 
 const (
 	ErrorReason_ServerBusy = "服务器繁忙"
+	ErrorReason_Token      = "生成token失败"
 	ErrorReason_ReLogin    = "请重新登陆"
 )
 
@@ -93,15 +96,15 @@ func Login(c *gin.Context) {
 	claims.IssuedAt = time.Now().Unix()
 	claims.ExpiresAt = time.Now().Add(time.Hour * time.Duration(ExpireTime)).Unix()
 	//获取token 存入redis
-	signedToken, err := GetToken(claims)
-	userInfoJSON, _ := json.Marshal(userInfo)
-	store.RedisClient.Set(store.Ctx, signedToken, userInfoJSON, time.Hour*12)
+	token := utils.CreateToken() + "#" + strconv.Itoa(int(userInfo.Id))
+	userInfoJSON, err := json.Marshal(userInfo)
 	if err != nil {
-		c.String(http.StatusInternalServerError, err.Error())
+		c.JSON(http.StatusInternalServerError, errno.ConstructErrResp("1", err.Error()))
 		return
 	}
+	store.RedisClient.Set(store.Ctx, token, userInfoJSON, time.Hour*12)
 	m := make(map[string]interface{})
-	m["token"] = signedToken
+	m["token"] = token
 	m["user_Info"] = userInfo
 	c.JSON(http.StatusOK, gin.H{
 		"code": 1,
@@ -181,10 +184,8 @@ func GetToken(claims *JWTClaims) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	signedToken, err := token.SignedString([]byte(Secret))
 	if err != nil {
-		return "", errors.New(ErrorReason_ServerBusy)
+		return "", errors.New(ErrorReason_Token)
 	}
-	//split := strings.Split(signedToken, ".")
-	//signedToken = split[2]
 	return signedToken, nil
 }
 

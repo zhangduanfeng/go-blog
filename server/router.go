@@ -3,12 +3,11 @@ package server
 import (
 	"crypto/md5"
 	"encoding/hex"
+	"github.com/gin-gonic/gin"
 	"go-blog/errno"
 	"go-blog/handler"
+	"go-blog/store"
 	"net/http"
-	"strings"
-
-	"github.com/gin-gonic/gin"
 )
 
 const (
@@ -51,17 +50,19 @@ func NewRouter() *gin.Engine {
 
 func Authorize() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		//username := c.Query("username") // 用户名
-		//ts := c.Query("ts")             // 时间戳
 		token := c.GetHeader("token") // 访问令牌
-
-		if strings.ToLower(token) != "" {
-			// 验证通过，会继续访问下一个中间件
+		if token != "" {
+			result, err := store.RedisClient.Get(store.Ctx, token).Result()
+			if err != nil || result == "" {
+				// 验证不通过，不再调用后续的函数处理
+				c.Abort()
+				c.JSON(http.StatusUnauthorized, errno.ConstructErrResp("1", "token认证失败"))
+			}
 			c.Next()
 		} else {
 			// 验证不通过，不再调用后续的函数处理
 			c.Abort()
-			c.JSON(http.StatusUnauthorized, errno.ConstructErrResp("", "token认证失败"))
+			c.JSON(http.StatusUnauthorized, errno.ConstructErrResp("1", "请求头不存在token"))
 		}
 	}
 }

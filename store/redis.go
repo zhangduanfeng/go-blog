@@ -22,9 +22,8 @@ func InitRedis() {
 		DB:       0,            // use default DB
 		PoolSize: 10,
 	})
-	result := RedisClient.Ping(context.Background())
+	result := RedisClient.Ping(Ctx)
 	if result.Val() != "PONG" {
-		// 连接有问题
 		logrus.Error("redis连接失败")
 	} else {
 		logrus.Info("redis连接成功")
