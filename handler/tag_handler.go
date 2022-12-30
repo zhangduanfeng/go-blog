@@ -2,6 +2,7 @@ package handler
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/sirupsen/logrus"
 	"go-blog/errno"
 	"go-blog/model"
 	"go-blog/service"
@@ -15,6 +16,7 @@ import (
  * @Date 2022/11/14 17:55
  **/
 func ListCategoryAndTag(c *gin.Context) {
+	logrus.Info("哈哈哈哈")
 	categories, err := service.ListCategories()
 
 	tags, err := service.ListTags()

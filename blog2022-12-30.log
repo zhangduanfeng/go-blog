@@ -1,0 +1,4 @@
+time="2022-12-30T22:16:34+08:00" level=info msg="redis连接成功" func=go-blog/store.RedisInit file="/Users/duanfeng/Desktop/go-blog/store/redis.go:29"
+time="2022-12-30T22:16:54+08:00" level=info msg="哈哈哈哈" func=go-blog/handler.ListCategoryAndTag file="/Users/duanfeng/Desktop/go-blog/handler/tag_handler.go:19"
+time="2022-12-30T22:16:54+08:00" level=info msg="SELECT * FROM `category`   ORDER BY `id`" func="go-blog/store.(*GormLogger).Print" file="/Users/duanfeng/Desktop/go-blog/store/mysql.go:55" duration=12.301667ms module=gorm rows_returned=4 src="/Users/duanfeng/Desktop/go-blog/dal/db/tag.go:33" type=sql values="[]"
+time="2022-12-30T22:16:54+08:00" level=info msg="SELECT * FROM `tag`   ORDER BY `id`" func="go-blog/store.(*GormLogger).Print" file="/Users/duanfeng/Desktop/go-blog/store/mysql.go:55" duration=12.386291ms module=gorm rows_returned=4 src="/Users/duanfeng/Desktop/go-blog/dal/db/tag.go:15" type=sql values="[]"

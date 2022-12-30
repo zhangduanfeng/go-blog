@@ -14,9 +14,6 @@ func MysqlInit() {
 		"mysql",
 		"root:zdf112233.@(sh-cynosdbmysql-grp-1vg8w4ba.sql.tencentcdb.com:20182)/blog_db?parseTime=true")
 	if err != nil {
-		panic(err)
-	}
-	if err != nil {
 		fmt.Println("MySQL连接失败")
 		panic(err)
 	}

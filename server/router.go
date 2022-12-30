@@ -4,10 +4,14 @@ import (
 	"crypto/md5"
 	"encoding/hex"
 	"github.com/gin-gonic/gin"
+	rotatelogs "github.com/lestrrat-go/file-rotatelogs"
 	"go-blog/errno"
 	"go-blog/handler"
 	"go-blog/store"
+	"io"
 	"net/http"
+	"os"
+	"time"
 )
 
 const (
@@ -31,6 +35,20 @@ func MD5(data []byte) string {
 //     b. 这两种各有优劣，第一种层次比较清晰简洁，但是不利于搜索；第二种排查问题方便，直接搜索路由就行；
 //     我们在项目中leader 比较推荐第二种，这样团队搜索路由很方面，能很快定位。因为这边我也全部改成第二种了
 func NewRouter() *gin.Engine {
+	// 禁用控制台颜色
+	gin.DisableConsoleColor()
+	// 创建记录日志的文件
+	path := "blog"
+	writer, _ := rotatelogs.New(
+		path+"%Y%m%d.log",
+		rotatelogs.WithRotationCount(7),
+		rotatelogs.WithRotationSize(100*1024*1024),
+		//这里设置1分钟产生一个日志文件
+		rotatelogs.WithRotationTime(time.Duration(24)*time.Hour),
+	)
+	// 如果需要将日志同时写入文件和控制台，请使用以下代码
+	gin.DefaultWriter = io.MultiWriter(writer, os.Stdout)
+
 	r := gin.Default()
 	r.POST("/login", handler.Login)
 	r.POST("/register", handler.Register)

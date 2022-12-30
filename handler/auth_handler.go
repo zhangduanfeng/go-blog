@@ -4,7 +4,6 @@ import (
 	"context"
 	_ "database/sql"
 	"errors"
-	"fmt"
 	"github.com/goccy/go-json"
 	"go-blog/errno"
 	"go-blog/model"
@@ -176,7 +175,6 @@ func VerifyAction(strToken string) (*JWTClaims, error) {
 	if err := token.Claims.Valid(); err != nil {
 		return nil, errors.New(ErrorReason_ReLogin)
 	}
-	fmt.Println("verify")
 	return claims, nil
 }
 

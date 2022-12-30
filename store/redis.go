@@ -15,7 +15,7 @@ var Ctx = context.Background()
  * @Author duanfeng.zhang
  * @Date 2022/12/18 15:19
  **/
-func InitRedis() {
+func RedisInit() {
 	RedisClient = redis.NewClient(&redis.Options{
 		Addr:     "124.221.221.82:6379",
 		Password: "blog112233", // no password set
