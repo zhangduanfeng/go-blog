@@ -38,7 +38,7 @@ func NewRouter() *gin.Engine {
 	// 禁用控制台颜色
 	gin.DisableConsoleColor()
 	// 创建记录日志的文件
-	path := "blog"
+	path := "/data/blog/log/blog"
 	writer, _ := rotatelogs.New(
 		path+"%Y%m%d.log",
 		rotatelogs.WithRotationCount(7),
