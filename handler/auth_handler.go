@@ -111,6 +111,11 @@ func Login(c *gin.Context) {
 	})
 }
 
+/**
+ * @Description 注册
+ * @Param
+ * @return
+ **/
 func Register(c *gin.Context) {
 	var req vo.RegisterReq
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -124,7 +129,22 @@ func Register(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, errno.ConstructErrResp(string(rune(errno.ERROR)), err.Error()))
 		return
 	}
-	c.JSON(http.StatusOK, errno.ConstructResp("", "", nil))
+	c.JSON(http.StatusOK, errno.ConstructResp("0", "注册成功", nil))
+	return
+}
+
+/**
+ * @Description 退出登录
+ * @Param
+ * @return
+ **/
+func Logout(c *gin.Context) {
+	token := c.GetHeader("token")
+	err := service.Logout(token)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, errno.ConstructResp("1", "退出登录失败!", nil))
+	}
+	c.JSON(http.StatusOK, errno.ConstructResp("0", "退出登录成功", nil))
 	return
 }
 

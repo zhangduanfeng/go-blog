@@ -52,17 +52,18 @@ func NewRouter() *gin.Engine {
 	r := gin.Default()
 	r.POST("/login", handler.Login)
 	r.POST("/register", handler.Register)
+	r.GET("/article/list", handler.ListArticles)
+	r.GET("/article/details", handler.ArticleDetails)
+	r.GET("/category/list", handler.ListCategoryAndTag)
 
 	//以下的接口，都使用Authorize()中间件身份验证
 	r.Use(Authorize())
 
-	r.GET("/article/list", handler.ListArticles)
-	r.GET("/article/details", handler.ArticleDetails)
+	r.POST("/logout", handler.Logout)
 	r.POST("/article/create", handler.CreateArticle)
 	r.POST("/article/publish", handler.PublishArticle)
 	r.POST("/article/save", handler.SaveArticle)
 	r.POST("/upload", handler.Upload)
-	r.GET("/category/list", handler.ListCategoryAndTag)
 	return r
 }
 

@@ -3,10 +3,11 @@ package service
 import (
 	"context"
 	"errors"
+	"github.com/sirupsen/logrus"
 	"go-blog/dal/db"
 	"go-blog/model"
+	"go-blog/store"
 	"time"
-
 )
 
 /**
@@ -24,12 +25,22 @@ func CreateUser(ctx context.Context, userName, passWord string) error {
 	}
 
 	var user = &model.User{
-		Username: userName,
-		Password: passWord,
+		Username:   userName,
+		Password:   passWord,
 		CreateTime: time.Now(),
 		UpdateTime: time.Now(),
 	}
 	if err := db.CreateUser(ctx, user); err != nil {
+		return err
+	}
+	return nil
+}
+
+func Logout(token string) error {
+	//删除redis中的token
+	err := store.RedisClient.Del(store.Ctx, token).Err()
+	if err != nil {
+		logrus.Error("退出登录异常: ", err)
 		return err
 	}
 	return nil
