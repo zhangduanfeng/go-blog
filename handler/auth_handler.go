@@ -4,6 +4,7 @@ import (
 	"context"
 	_ "database/sql"
 	"github.com/goccy/go-json"
+	"github.com/sirupsen/logrus"
 	"go-blog/errno"
 	"go-blog/model"
 	"go-blog/service"
@@ -48,13 +49,15 @@ type JWTClaims struct { // token里面添加用户信息，验证token后可能�
  * @return
  **/
 func Login(c *gin.Context) {
+	logrus.Info("嘻嘻嘻")
 	var user model.User
 	err := c.ShouldBindJSON(&user)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"code":    0,
+			"code":    1,
 			"message": "参数解析异常",
 		})
+		return
 	}
 	result := store.DB.Debug().Where("username = ? AND password = ? AND valid = 0", user.Username, user.Password).First(&user)
 	if result.Error != nil {
@@ -64,11 +67,13 @@ func Login(c *gin.Context) {
 				"code":    errno.ERROR_USERNAME_NOT_EXIST,
 				"message": errno.GetErrmsg(errno.ERROR_USERNAME_NOT_EXIST),
 			})
+			return
 		} else {
 			c.JSON(http.StatusInternalServerError, gin.H{
-				"code":    0,
+				"code":    1,
 				"message": errno.GetErrmsg(errno.ERROR),
 			})
+			return
 		}
 		return
 	}
