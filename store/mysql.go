@@ -36,6 +36,12 @@ func MysqlInit() {
 	}
 	logrus.Info("MySQL连接成功")
 	DB.SingularTable(true)
+	//空闲
+	DB.DB().SetMaxIdleConns(50)
+	//打开
+	DB.DB().SetMaxOpenConns(100)
+	//超时
+	DB.DB().SetConnMaxLifetime(time.Second * 30)
 	DB.SetLogger(&GormLogger{})
 	DB.LogMode(true)
 	Formatter := new(logrus.TextFormatter)
