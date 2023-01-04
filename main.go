@@ -7,6 +7,7 @@ import (
 
 func main() {
 	r := server.NewRouter()
+	store.LogInit()
 	store.MysqlInit()
 	store.RedisInit()
 	r.Run(":9099")
