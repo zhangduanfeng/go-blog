@@ -24,8 +24,8 @@ func RedisInit() {
 	})
 	result := RedisClient.Ping(Ctx)
 	if result.Val() != "PONG" {
-		logrus.Error("redis连接失败!")
+		logrus.Error("redis连接失败")
 	} else {
-		logrus.Info("redis连接成功!")
+		logrus.Info("redis连接成功")
 	}
 }
