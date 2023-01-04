@@ -32,11 +32,6 @@ func MysqlInit() {
 	DB, err = gorm.Open(
 		"mysql",
 		"root:zdf112233.@(sh-cynosdbmysql-grp-1vg8w4ba.sql.tencentcdb.com:20182)/blog_db?parseTime=true")
-	if err != nil {
-		logrus.Error("MySQL连接失败")
-		panic(err)
-	}
-	logrus.Info("MySQL连接成功")
 	DB.SingularTable(true)
 	//空闲
 	DB.DB().SetMaxIdleConns(50)
@@ -57,5 +52,9 @@ func MysqlInit() {
 	}
 	logrus.SetReportCaller(true)
 	logrus.SetOutput(io.MultiWriter(io1, io2, logFile))
-
+	if err != nil {
+		logrus.Error("MySQL连接失败")
+		panic(err)
+	}
+	logrus.Info("MySQL连接成功")
 }

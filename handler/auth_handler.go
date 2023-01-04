@@ -4,7 +4,6 @@ import (
 	"context"
 	_ "database/sql"
 	"github.com/goccy/go-json"
-	"github.com/sirupsen/logrus"
 	"go-blog/errno"
 	"go-blog/model"
 	"go-blog/service"
@@ -49,7 +48,6 @@ type JWTClaims struct { // token里面添加用户信息，验证token后可能�
  * @return
  **/
 func Login(c *gin.Context) {
-	logrus.Info("嘻嘻嘻")
 	var user model.User
 	err := c.ShouldBindJSON(&user)
 	if err != nil {
